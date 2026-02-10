@@ -93,8 +93,24 @@
           <td></td>
           <td></td>
           <td style="width:120px;">
-            <input type="number" class="form-control mb-1" min="1" value="1" id="qty-1">
-            <button class="btn btn-sm btn-primary w-100" onclick="agregarAlCarrito('PRODUCTO', 'PRECIO', document.getElementById('qty-1').value)">Pedir</button>
+           <input
+  type="number"
+  class="form-control mb-1"
+  min="1"
+  value="1"
+  id="qty-shampoo"
+>
+
+<button
+  class="btn btn-sm btn-primary w-100"
+  onclick="agregarAlCarrito(
+    'Shampoo Yilho',
+    3500,
+    document.getElementById('qty-shampoo').value
+  )">
+  Pedir
+</button>
+
           </td>
         </tr>
 
@@ -143,15 +159,25 @@
   /* CARRITO */
   let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
   actualizarCantidad();
+ function agregarAlCarrito(nombre, precio, cantidad) {
+  cantidad = Number(cantidad);
+  precio = Number(precio);
 
-  function agregarAlCarrito(nombre, precio, cantidad) {
-    carrito.push({ nombre, precio, cantidad });
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-    actualizarCantidad();
+  let existe = carrito.find(p => p.nombre === nombre);
+
+  if (existe) {
+    existe.cantidad += cantidad;
+  } else {
+    carrito.push({
+      nombre,
+      precio,
+      cantidad
+    });
   }
 
-  function actualizarCantidad() {
-    document.getElementById('cantidad_carrito').innerText = carrito.length;
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  renderCarrito();
+   
   }
 
   function enviarWhatsApp() {
@@ -174,6 +200,81 @@
     window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank');
   }
 </script>
+function toggleCarrito() {
+  const box = document.getElementById('miniCarrito');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  renderCarrito();
+}
 
+function renderCarrito() {
+  const lista = document.getElementById('listaCarrito');
+  lista.innerHTML = '';
+
+  carrito.forEach(p => {
+    lista.innerHTML += `
+      <li>${p.nombre} x${p.cantidad}</li>
+    `;
+  });
+}
+<!-- CARRITO MINI -->
+<div id="miniCarrito" style="
+  display:none;
+  position:fixed;
+  bottom:70px;
+  right:20px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 0 15px rgba(0,0,0,.2);
+  padding:15px;
+  width:300px;
+  z-index:2000;
+">
+  function renderCarrito(){
+    let html = '';
+    let total = 0;
+    let cantidadTotal = 0;
+
+    carrito.forEach((p,i)=>{
+      total += p.precio * p.cantidad;
+      cantidadTotal += p.cantidad;
+
+      html += `
+        <div class="item-carrito">
+          <strong>${p.nombre}</strong><br>
+          $${p.precio}
+          <div class="controles mt-1">
+            <button onclick="cambiarCantidad(${i},-1)">−</button>
+            <span class="mx-2">${p.cantidad}</span>
+            <button onclick="cambiarCantidad(${i},1)">+</button>
+            <button onclick="eliminarProducto(${i})">🗑</button>
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById('listaCarrito').innerHTML = html;
+    document.getElementById('totalCarrito').innerText = total;
+    document.getElementById('cantidad_carrito').innerText = cantidadTotal;
+  }
+
+  function cambiarCantidad(i, cambio){
+    carrito[i].cantidad += cambio;
+
+    if (carrito[i].cantidad <= 0) {
+      carrito.splice(i,1);
+    }
+
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    renderCarrito();
+  }
+
+  function eliminarProducto(i){
+    carrito.splice(i,1);
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    renderCarrito();
+  }
+  <h6>🛒 Carrito</h6>
+  <ul id="listaCarrito" style="font-size:14px;"></ul>
+</div>
 </body>
 </html>
