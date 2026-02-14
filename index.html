@@ -100,7 +100,6 @@
   value="1"
   id="qty-shampoo"
 >
-
 <button
   class="btn btn-sm btn-primary w-100"
   onclick="agregarAlCarrito(
@@ -123,7 +122,7 @@
 
 <!-- BARRA CARRITO -->
 <div class="carrito-bar">
-  <button class="btn btn-dark">
+ <button class="btn btn-dark" onclick="toggleCarrito()">
     🛒 (<span id="cantidad_carrito">0</span>)
   </button>
   <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">
@@ -180,43 +179,88 @@
    
   }
 
-  function enviarWhatsApp() {
-    if (carrito.length === 0) {
-      alert('El carrito está vacío');
-      return;
-    }
-
-    let total = 0;
-    let mensaje = 'Hola, quiero pedir:%0A';
-
-    carrito.forEach(p => {
-      mensaje += `- ${p.nombre} x${p.cantidad} ($${p.precio})%0A`;
-      total += (p.precio * p.cantidad);
-    });
-
-    mensaje += `%0ATotal: $${total}`;
-
-    const numero = '5491158165717';
-    window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank');
+ function enviarWhatsApp() {
+  if (carrito.length === 0) {
+    alert('El carrito está vacío');
+    return;
   }
-</script>
+
+  let total = 0;
+  let mensaje = 'Hola, quiero pedir:%0A';
+
+  carrito.forEach(p => {
+    mensaje += `- ${p.nombre} x${p.cantidad} ($${p.precio})%0A`;
+    total += (p.precio * p.cantidad);
+  });
+
+  mensaje += `%0ATotal: $${total}`;
+
+  const numero = '5491158165717';
+  window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank');
+}
+
+/* ABRIR / CERRAR CARRITO */
 function toggleCarrito() {
   const box = document.getElementById('miniCarrito');
   box.style.display = box.style.display === 'none' ? 'block' : 'none';
   renderCarrito();
 }
 
+/* DIBUJAR CARRITO */
 function renderCarrito() {
-  const lista = document.getElementById('listaCarrito');
-  lista.innerHTML = '';
 
-  carrito.forEach(p => {
-    lista.innerHTML += `
-      <li>${p.nombre} x${p.cantidad}</li>
+  let html = '';
+  let total = 0;
+  let cantidadTotal = 0;
+
+  carrito.forEach((p,i)=>{
+
+    total += p.precio * p.cantidad;
+    cantidadTotal += p.cantidad;
+
+    html += `
+      <div class="border-bottom mb-2 pb-2">
+        <strong>${p.nombre}</strong><br>
+        $${p.precio}
+
+        <div class="mt-1">
+          <button onclick="cambiarCantidad(${i},-1)">−</button>
+          <span class="mx-2">${p.cantidad}</span>
+          <button onclick="cambiarCantidad(${i},1)">+</button>
+          <button onclick="eliminarProducto(${i})">🗑</button>
+        </div>
+      </div>
     `;
   });
+
+  document.getElementById('listaCarrito').innerHTML = html;
+  document.getElementById('totalCarrito').innerText = total;
+  document.getElementById('cantidad_carrito').innerText = cantidadTotal;
+
+  localStorage.setItem('carrito', JSON.stringify(carrito));
 }
-<!-- CARRITO MINI -->
+
+/* SUMAR / RESTAR */
+function cambiarCantidad(i, cambio){
+
+  carrito[i].cantidad += cambio;
+
+  if(carrito[i].cantidad <= 0){
+    carrito.splice(i,1);
+  }
+
+  renderCarrito();
+}
+
+/* ELIMINAR */
+function eliminarProducto(i){
+  carrito.splice(i,1);
+  renderCarrito();
+}
+</script>
+</div>
+</body
+  <!-- MINI CARRITO -->
 <div id="miniCarrito" style="
   display:none;
   position:fixed;
@@ -229,52 +273,14 @@ function renderCarrito() {
   width:300px;
   z-index:2000;
 ">
-  function renderCarrito(){
-    let html = '';
-    let total = 0;
-    let cantidadTotal = 0;
 
-    carrito.forEach((p,i)=>{
-      total += p.precio * p.cantidad;
-      cantidadTotal += p.cantidad;
-
-      html += `
-        <div class="item-carrito">
-          <strong>${p.nombre}</strong><br>
-          $${p.precio}
-          <div class="controles mt-1">
-            <button onclick="cambiarCantidad(${i},-1)">−</button>
-            <span class="mx-2">${p.cantidad}</span>
-            <button onclick="cambiarCantidad(${i},1)">+</button>
-            <button onclick="eliminarProducto(${i})">🗑</button>
-          </div>
-        </div>
-      `;
-    });
-
-    document.getElementById('listaCarrito').innerHTML = html;
-    document.getElementById('totalCarrito').innerText = total;
-    document.getElementById('cantidad_carrito').innerText = cantidadTotal;
-  }
-
-  function cambiarCantidad(i, cambio){
-    carrito[i].cantidad += cambio;
-
-    if (carrito[i].cantidad <= 0) {
-      carrito.splice(i,1);
-    }
-
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-    renderCarrito();
-  }
-
-  function eliminarProducto(i){
-    carrito.splice(i,1);
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-    renderCarrito();
-  }
   <h6>🛒 Carrito</h6>
-  <ul id="listaCarrito" style="font-size:14px;"></ul>
+
+  <div id="listaCarrito"></div>
+
+  <hr>
+
+  <strong>Total: $<span id="totalCarrito">0</span></strong>
+
 </div>
-</body>
-</html>
+</html
