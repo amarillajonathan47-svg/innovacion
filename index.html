@@ -11,9 +11,10 @@
     body { background:#f4f6f8; }
 
     .banner {
-      position: relative;
-      height: 380px;
-      background: url('banner.png') center/cover no-repeat;
+  position: relative;
+  height: 600px;
+  background: url('banner.png') center center no-repeat;
+  background-size: cover;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -54,6 +55,25 @@
     }
 
     .btn-whatsapp { background:#25d366; color:#fff; }
+
+    .titulo-principal {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 30px 0;
+  letter-spacing: 4px;
+  animation: glitchFade 3s infinite;
+}
+
+@keyframes glitchFade {
+  0% { opacity: 1; transform: translateY(0); }
+  20% { opacity: .3; transform: translateY(-2px); }
+  40% { opacity: 1; transform: translateY(0); }
+  60% { opacity: .2; }
+  80% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
   </style>
 </head>
 
@@ -61,11 +81,12 @@
 
 <header class="banner">
   <div class="overlay"></div>
-  <div class="content">
-    <h1>INNOVACIÓN</h1>
-    <a href="#catalogo" class="btn btn-primary btn-lg">COMPRAR YA</a>
-  </div>
 </header>
+
+  <div class="titulo-principal">
+  INNOVACIÓN
+</div>
+
 
 <div id="catalogo" class="container my-4">
 
@@ -207,14 +228,14 @@
       alert('Carrito vacío');
       return;
     }
-
-    let total = 0;
     let mensaje = 'Hola, quiero pedir:%0A';
 
-    carrito.forEach(p => {
-      mensaje += `- ${p.nombre} x${p.cantidad}%0A`;
-      total += p.precio * p.cantidad;
-    });
+    let total = 0;
+
+carrito.forEach(p => {
+  mensaje += `- ${p.nombre} x${p.cantidad}%0A`;
+  total += p.precio * p.cantidad;
+});
 
     mensaje += `%0ATotal: $${total}`;
 
@@ -225,10 +246,4 @@
 </script>
 
 </body>
-</html>
-
-
-  <strong>Total: $<span id="totalCarrito">0</span></strong>
-
-</div>
 </html
