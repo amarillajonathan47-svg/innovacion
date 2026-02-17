@@ -8,62 +8,57 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    body { background:#f4f6f8; }
+   <style>
+  body { background:#f4f6f8; }
 
-    .banner {
-  position: relative;
-  height: 600px;
-  background: url('banner.png') center center no-repeat;
-  background-size: cover;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      text-align:center;
-    }
+  .banner {
+    position: relative;
+    height: 320px;   /* ← banner más chico */
+    background: url('banner.png') center center no-repeat;
+    background-size: cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    text-align:center;
+  }
 
-    .banner .overlay{
-      position:absolute;
-      inset:0;
-      background:rgba(0,0,0,.55);
-    }
+  .banner .overlay{
+    position:absolute;
+    inset:0;
+    background: radial-gradient(circle, rgba(0,0,0,.2), rgba(0,0,0,.75));
+  }
 
-    .banner .content{
-      position:relative;
-      z-index:2;
-    }
+  .banner-content h1 {
+    font-size: 3.2rem;
+    font-weight: 900;
+    letter-spacing: 6px;
+    color: white;
+    position: relative;
+    animation: glitch 2.5s infinite;
+    text-shadow: 0 0 10px rgba(0,255,255,.6);
+  }
 
-    .banner h1{
-      font-size:3rem;
-      font-weight:800;
-      margin-bottom:20px;
-    }
+  @keyframes glitch {
+    0% { transform: translate(0); opacity: 1; }
+    20% { transform: translate(-2px, 2px); opacity: .8; }
+    40% { transform: translate(-2px, -2px); opacity: .4; }
+    60% { transform: translate(2px, 2px); opacity: .8; }
+    80% { transform: translate(2px, -2px); opacity: .6; }
+    100% { transform: translate(0); opacity: 1; }
+  }
 
-    .table img { width:80px; }
+  .table img { width:80px; }
 
-    .carrito-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #343a40;
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      z-index: 1000;
-    }
-
-    .btn-whatsapp { background:#25d366; color:#fff; }
-
-    .titulo-principal {
-  text-align: center;
-  font-size: 3rem;
-  font-weight: 800;
-  margin: 30px 0;
-  letter-spacing: 4px;
-  animation: glitchFade 3s infinite;
-}
+  .carrito-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #343a40;
+    padding: 12px;
+    display: flex;
+    just
 
 @keyframes glitchFade {
   0% { opacity: 1; transform: translateY(0); }
@@ -81,12 +76,11 @@
 
 <header class="banner">
   <div class="overlay"></div>
+
+  <div class="banner-content">
+    <h1 class="glitch">INNOVACIÓN</h1>
+  </div>
 </header>
-
-  <div class="titulo-principal">
-  INNOVACIÓN
-</div>
-
 
 <div id="catalogo" class="container my-4">
 
@@ -246,4 +240,5 @@ carrito.forEach(p => {
 </script>
 
 </body>
-</html
+</html>
+
