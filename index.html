@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,26 +10,41 @@
   <style>
     body { background:#f4f6f8; }
 
+    /* ✅ BANNER MÁS VIVO */
     .banner {
       position: relative;
       height: 380px;
       background: url('banner.png') center/cover no-repeat;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      text-align:center;
     }
 
     .banner .overlay{
       position:absolute;
       inset:0;
-      background:rgba(0,0,0,.55);
+      background: linear-gradient(
+        135deg,
+        rgba(0,150,255,.4),
+        rgba(0,0,0,.7)
+      );
+      backdrop-filter: blur(2px);
     }
 
-    .banner .content{
+    /* ✅ TÍTULO QUE SOBRESALE */
+    .titulo-principal {
+      text-align:center;
+      font-size:3.2rem;
+      font-weight:900;
+      letter-spacing:6px;
+      margin-top:-60px;
       position:relative;
-      z-index:2;
+      z-index:10;
+      color:white;
+      animation: glow 2.5s infinite alternate;
+      text-shadow: 0 0 15px rgba(0,150,255,.9);
+    }
+
+    @keyframes glow {
+      from { opacity:.7; }
+      to { opacity:1; }
     }
 
     .table img { width:80px; }
@@ -49,6 +63,8 @@
     }
 
     .btn-whatsapp { background:#25d366; color:#fff; }
+    .btn-vaciar { background:#dc3545; color:#fff; }
+
   </style>
 </head>
 
@@ -56,10 +72,9 @@
 
 <header class="banner">
   <div class="overlay"></div>
-  <div class="content">
-    <a href="#catalogo" class="btn btn-primary btn-lg">COMPRAR YA</a>
-  </div>
 </header>
+
+<h1 class="titulo-principal">INNOVACIÓN</h1>
 
 <div id="catalogo" class="container my-4">
 
@@ -85,10 +100,10 @@
       <tbody>
         <tr>
           <td><img src="" alt=""></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>Producto</td>
+          <td>$3500</td>
+          <td>Tecnología</td>
+          <td>Descripción</td>
           <td style="width:120px;">
             <input type="number" class="form-control mb-1" min="1" value="1" id="qty">
             <button class="btn btn-sm btn-primary w-100"
@@ -118,6 +133,10 @@
 ">
   <h6>🛒 Carrito</h6>
   <div id="listaCarrito"></div>
+
+  <button class="btn btn-sm btn-vaciar w-100 mt-2" onclick="vaciarCarrito()">
+    Vaciar Carrito
+  </button>
 </div>
 
 <!-- BARRA -->
@@ -190,6 +209,12 @@
     renderCarrito();
   }
 
+  /* ✅ NUEVO → VACIAR CARRITO */
+  function vaciarCarrito(){
+    carrito = [];
+    renderCarrito();
+  }
+
   function enviarWhatsApp() {
     if (carrito.length === 0) {
       alert('Carrito vacío');
@@ -214,5 +239,3 @@
 
 </body>
 </html>
-
-
