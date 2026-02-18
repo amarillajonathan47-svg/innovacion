@@ -1,371 +1,263 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>INNOVACION | Catálogo</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INNOVACION | Catálogo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { 
+            background: #f4f7f6; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        /* ===== BANNER LIMPIO ===== */
+        .banner {
+            width: 100%;
+            height: 350px;
+            background-image: url('banner.png1.jpg'); 
+            background-size: cover;
+            background-position: center;
+        }
 
-  <style>
-    body { 
-      background:#ebebeb; 
-    }
-body { 
-        background: #f4f7f6; 
-        margin: 0; 
-        padding: 0; 
-        font-family: sans-serif;
-    }
+        /* ===== BUSCADOR CENTRADO ===== */
+        .search-container {
+            max-width: 800px;
+            margin: -30px auto 40px auto;
+            position: relative;
+            z-index: 10;
+            padding: 0 15px;
+        }
 
-    .banner {
-        width: 100%;
-        height: 350px;
-        background-image: url('banner.png1.jpg'); 
-        background-size: cover;
-        background-position: center;
-        margin: 0;
-        padding: 0;
-    }
+        .search-container input {
+            height: 60px;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding-left: 50px;
+            font-size: 1.1rem;
+        }
 
-    .search-container {
-        max-width: 800px;
-        margin: -30px auto 40px auto; 
-        position: relative;
-        z-index: 10;
-        padding: 0 15px;
-    }
+        /* ===== GRILLA DE PRODUCTOS ===== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto 100px auto;
+        }
 
-    .search-container input {
-        height: 60px;
-        border-radius: 12px;
-        border: none;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        padding-left: 50px;
-        font-size: 1.1rem;
-    }
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border: none;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px;
-        padding: 20px;
-    }
+        .product-card:hover { transform: translateY(-10px); }
 
-    .product-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        transition: transform 0.3s;
-    }
+        .product-img-box {
+            width: 100%;
+            height: 250px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
 
-    .product-img-box {
-        width: 100%;
-        height: 220px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
+        .product-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-    .badge-tech {
-        position: absolute;
-        top: 10px; left: 10px;
-        background: #3483fa;
-        color: white;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-    }
+        .badge-tech {
+            position: absolute;
+            top: 15px; left: 15px;
+            background: #3483fa;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
 
-    .product-info { padding: 20px; }
-    .product-price { font-size: 1.4rem; font-weight: 800; display: block; margin-bottom: 15px; }
+        .product-info { padding: 20px; text-align: center; }
+        .product-info h5 { font-size: 1.1rem; font-weight: 600; min-height: 50px; }
+        .product-price { font-size: 1.5rem; font-weight: 800; color: #333; display: block; margin: 10px 0; }
 
-    .btn-add {
-        background: #ffd814;
-        border: none;
-        font-weight: 700;
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-    }
-    }
+        .btn-add {
+            background: #ffd814;
+            border: none;
+            color: #000;
+            font-weight: 700;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+        .btn-add:hover { background: #f7ca00; }
 
-    /* ===== CARRITO ===== */
+        /* ===== BARRA FLOTANTE CENTRADA (BAJA Y SUBE) ===== */
+        .carrito-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
 
-    .carrito-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      border-top:1px solid #ddd;
-      z-index: 1000;
-    }
+        .btn-cart-float { background: #333; color: white; border-radius: 25px; border: none; padding: 10px 20px; font-weight: 600; }
+        .btn-wa-float { background: #25d366; color: white; border-radius: 25px; border: none; padding: 10px 20px; font-weight: 600; }
 
-    .btn-whatsapp { 
-      background:#25d366; 
-      color:#fff; 
-    }
-
-    #miniCarrito {
-      display:none;
-      position:fixed;
-      bottom:70px;
-      right:20px;
-      background:#fff;
-      border-radius:12px;
-      box-shadow:0 10px 30px rgba(0,0,0,.2);
-      padding:15px;
-      width:320px;
-      z-index:2000;
-    }
-
-    .btn-vaciar {
-      background:#ff4d4d;
-      color:white;
-      width:100%;
-      margin-top:10px;
-    }
-
-  </style>
+        /* CARRITO LATERAL */
+        #miniCarrito {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            width: 320px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            padding: 20px;
+            z-index: 3000;
+        }
+    </style>
 </head>
-
 <body>
-
-<!-- ===== BANNER ===== -->
 
 <header class="banner"></header>
 
 <div class="search-container">
     <div class="position-relative">
-        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">🔍</span>
-        <input type="text" class="form-control" placeholder="Buscar productos...">
+        <span class="position-absolute top-50 start-0 translate-middle-y ms-3">🔍</span>
+        <input type="text" id="inputBuscador" class="form-control" placeholder="¿Qué estás buscando hoy?" onkeyup="filtrarProductos()">
     </div>
 </div>
 
-<div class="container mb-5">
-    <div class="product-grid">
-        
-        <div class="product-card">
-            <div class="product-img-box">
-                <span class="badge-tech">💻 Tecnología</span>
-                <img src="URL_IMAGEN_NOTEBOOK" alt="Notebook">
-            </div>
-            <div class="product-info">
-                <h5>Notebook Gamer ASUS TUF A15</h5>
-                <span class="product-price">$250.000</span>
-                <button class="btn-add" onclick="agregarAlCarrito('Notebook ASUS', 250000, 1)">Agregar al carrito</button>
-            </div>
+<div class="container">
+    <div class="product-grid" id="contenedorProductos">
         </div>
-
-        <div class="product-card">
-            <div class="product-img-box">
-                <span class="badge-tech">🎧 Tecnología</span>
-                <img src="URL_IMAGEN_AIRPODS" alt="AirPods">
-            </div>
-            <div class="product-info">
-                <h5>Apple AirPods Pro</h5>
-                <span class="product-price">$150.000</span>
-                <button class="btn-add" onclick="agregarAlCarrito('AirPods Pro', 150000, 1)">Agregar al carrito</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-box">
-                <span class="badge-tech">📱 Tecnología</span>
-                <img src="URL_IMAGEN_IPHONE" alt="iPhone">
-            </div>
-            <div class="product-info">
-                <h5>iPhone 15 Pro Max</h5>
-                <span class="product-price">$800.000</span>
-                <button class="btn-add" onclick="agregarAlCarrito('iPhone 15 Pro', 800000, 1)">Agregar al carrito</button>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-img-box">
-                <span class="badge-tech" style="background:#ff4d4d;">💖 Belleza</span>
-                <img src="URL_IMAGEN_SHAMPOO" alt="Shampoo">
-            </div>
-            <div class="product-info">
-                <h5>Shampoo Profesional Yilho</h5>
-                <span class="product-price">$3.500</span>
-                <button class="btn-add" onclick="agregarAlCarrito('Shampoo Yilho', 3500, 1)">Agregar al carrito</button>
-            </div>
-        </div>
-
-    </div>
 </div>
-</header>
-<!-- ===== CATALOGO ===== -->
-
-<div id="catalogo" class="container my-4">
-
-  <div class="catalogo-box">
-
-    <div class="row mb-3">
-      <div class="col-md-4 ms-auto">
-        <input type="text" class="form-control" placeholder="Buscar producto...">
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Categoría</th>
-            <th>Información</th>
-            <th>Cantidad</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td><img src=""></td>
-            <td>Shampoo Yilho</td>
-            <td class="precio">$3.500</td>
-            <td>Cuidado</td>
-            <td>Alta calidad</td>
-            <td style="width:140px;">
-              <input type="number" class="form-control mb-1" min="1" value="1" id="qty1">
-              <button class="btn btn-primary btn-sm w-100"
-                onclick="agregarAlCarrito('Shampoo Yilho', 3500, document.getElementById('qty1').value)">
-                Pedir
-              </button>
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-</div>
-
-<!-- ===== MINI CARRITO ===== -->
 
 <div id="miniCarrito">
-  <h6>🛒 Carrito</h6>
-  <div id="listaCarrito"></div>
-  <hr>
-  <strong>Total: $<span id="totalCarrito">0</span></strong>
-
-  <button class="btn btn-vaciar" onclick="vaciarCarrito()">
-    Vaciar carrito
-  </button>
+    <h6 class="fw-bold">🛒 Tu Pedido</h6>
+    <div id="listaCarrito" style="max-height: 300px; overflow-y: auto;"></div>
+    <hr>
+    <div class="d-flex justify-content-between align-items:center mb-3">
+        <span>Total:</span>
+        <span class="fw-bold text-primary">$<span id="totalCarrito">0</span></span>
+    </div>
+    <button class="btn btn-danger btn-sm w-100 rounded-3" onclick="vaciarCarrito()">Vaciar carrito</button>
 </div>
 
-<!-- ===== BARRA ===== -->
-
 <div class="carrito-bar">
-  <button class="btn btn-dark" onclick="toggleCarrito()">
-    🛒 (<span id="cantidad_carrito">0</span>)
-  </button>
-
-  <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">
-    Enviar Pedido
-  </button>
+    <button class="btn-cart-float" onclick="toggleCarrito()">
+        🛒 (<span id="cantidad_carrito">0</span>)
+    </button>
+    <button class="btn-wa-float" onclick="enviarWhatsApp()">
+        Enviar Pedido
+    </button>
 </div>
 
 <script>
-  let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const productos = [
+        { id: 1, nombre: 'Notebook Gamer ASUS TUF A15', precio: 250000, cat: 'Tecnología', img: 'https://m.media-amazon.com/images/I/71f5Eu5lJSL._AC_SL1500_.jpg' },
+        { id: 2, nombre: 'Apple AirPods Pro', precio: 150000, cat: 'Tecnología', img: 'https://m.media-amazon.com/images/I/61SUj2W5yXL._AC_SL1500_.jpg' },
+        { id: 3, nombre: 'iPhone 15 Pro Max', precio: 800000, cat: 'Tecnología', img: 'https://m.media-amazon.com/images/I/81Os1neOnzL._AC_SL1500_.jpg' },
+        { id: 4, nombre: 'Shampoo Profesional Yilho', precio: 3500, cat: 'Belleza', img: 'https://yilho.com/wp-content/uploads/2021/05/shampoo-yilho.jpg' }
+    ];
 
-  function agregarAlCarrito(nombre, precio, cantidad) {
-    cantidad = Number(cantidad);
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-    let existe = carrito.find(p => p.nombre === nombre);
-
-    if (existe) {
-      existe.cantidad += cantidad;
-    } else {
-      carrito.push({ nombre, precio, cantidad });
+    function renderProductos(lista) {
+        const contenedor = document.getElementById('contenedorProductos');
+        contenedor.innerHTML = '';
+        lista.forEach(p => {
+            contenedor.innerHTML += `
+                <div class="product-card">
+                    <div class="product-img-box">
+                        <span class="badge-tech" style="${p.cat === 'Belleza' ? 'background:#ff4d4d' : ''}">${p.cat}</span>
+                        <img src="${p.img}" alt="${p.nombre}">
+                    </div>
+                    <div class="product-info">
+                        <h5>${p.nombre}</h5>
+                        <span class="product-price">$${p.precio.toLocaleString()}</span>
+                        <button class="btn-add" onclick="agregarAlCarrito('${p.nombre}', ${p.precio})">Agregar al carrito</button>
+                    </div>
+                </div>
+            `;
+        });
     }
 
-    renderCarrito();
-  }
-
-  function toggleCarrito() {
-    const box = document.getElementById('miniCarrito');
-    box.style.display = box.style.display === 'none' ? 'block' : 'none';
-    renderCarrito();
-  }
-
-  function renderCarrito() {
-    let html = '';
-    let total = 0;
-    let cantidadTotal = 0;
-
-    carrito.forEach((p,i)=>{
-      total += p.precio * p.cantidad;
-      cantidadTotal += p.cantidad;
-
-      html += `
-        <div class="border-bottom mb-2 pb-2">
-          <strong>${p.nombre}</strong>
-          <div>
-            $${p.precio}
-            <div>
-              <button onclick="cambiarCantidad(${i},-1)">−</button>
-              <span>${p.cantidad}</span>
-              <button onclick="cambiarCantidad(${i},1)">+</button>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-
-    document.getElementById('listaCarrito').innerHTML = html;
-    document.getElementById('totalCarrito').innerText = total;
-    document.getElementById('cantidad_carrito').innerText = cantidadTotal;
-
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-  }
-
-  function cambiarCantidad(i, cambio){
-    carrito[i].cantidad += cambio;
-
-    if(carrito[i].cantidad <= 0){
-      carrito.splice(i,1);
+    function filtrarProductos() {
+        const texto = document.getElementById('inputBuscador').value.toLowerCase();
+        const filtrados = productos.filter(p => p.nombre.toLowerCase().includes(texto));
+        renderProductos(filtrados);
     }
 
-    renderCarrito();
-  }
-
-  function vaciarCarrito() {
-    carrito = [];
-    renderCarrito();
-  }
-
-  function enviarWhatsApp() {
-    if (carrito.length === 0) {
-      alert('Carrito vacío');
-      return;
+    function agregarAlCarrito(nombre, precio) {
+        let existe = carrito.find(p => p.nombre === nombre);
+        if (existe) { existe.cantidad++; } 
+        else { carrito.push({ nombre, precio, cantidad: 1 }); }
+        actualizarInterfaz();
     }
 
-    let mensaje = 'Hola, quiero pedir:%0A';
-    let total = 0;
+    function actualizarInterfaz() {
+        let html = '';
+        let total = 0;
+        let cant = 0;
 
-    carrito.forEach(p => {
-      mensaje += `- ${p.nombre} x${p.cantidad}%0A`;
-      total += p.precio * p.cantidad;
-    });
+        carrito.forEach((p, i) => {
+            total += p.precio * p.cantidad;
+            cant += p.cantidad;
+            html += `<div class="d-flex justify-content-between mb-2 small">
+                <span>${p.nombre} (x${p.cantidad})</span>
+                <span class="fw-bold">$${(p.precio * p.cantidad).toLocaleString()}</span>
+            </div>`;
+        });
 
-    mensaje += `%0ATotal: $${total}`;
+        document.getElementById('listaCarrito').innerHTML = html || '<p class="text-muted small">El carrito está vacío</p>';
+        document.getElementById('totalCarrito').innerText = total.toLocaleString();
+        document.getElementById('cantidad_carrito').innerText = cant;
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+    }
 
-    window.open(`https://wa.me/5491158165717?text=${mensaje}`);
-  }
+    function toggleCarrito() {
+        const box = document.getElementById('miniCarrito');
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
 
-  renderCarrito();
+    function vaciarCarrito() {
+        carrito = [];
+        actualizarInterfaz();
+    }
+
+    function enviarWhatsApp() {
+        if (carrito.length === 0) return alert('¡Agrega algo al carrito primero!');
+        let mensaje = 'Hola, quiero pedir:%0A';
+        carrito.forEach(p => mensaje += `- ${p.nombre} x${p.cantidad}%0A`);
+        window.open(`https://wa.me/5491158165717?text=${mensaje}`);
+    }
+
+    // Inicializar
+    renderProductos(productos);
+    actualizarInterfaz();
 </script>
 
 </body>
