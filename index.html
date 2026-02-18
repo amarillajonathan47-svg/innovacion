@@ -11,43 +11,85 @@
     body { 
       background:#ebebeb; 
     }
-
-   /* ===== BANNER LIMPIO (SOLO FONDO) ===== */
+body { 
+        background: #f4f7f6; 
+        margin: 0; 
+        padding: 0; 
+        font-family: sans-serif;
+    }
 
     .banner {
-      position: relative;
-      height: 350px; /* Mantener la altura para que se vea la imagen */
-      background-image: url('banner.png1.jpg'); 
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      display: block; /* Ya no necesitamos flex porque no hay texto */
-      overflow: hidden;
+        width: 100%;
+        height: 350px;
+        background-image: url('banner.png1.jpg'); 
+        background-size: cover;
+        background-position: center;
+        margin: 0;
+        padding: 0;
     }
 
-    /* Borrá cualquier regla que diga .banner h1 o .instagram-tag para limpiar el código */
-    @keyframes glow {
-      from { text-shadow: 0 0 10px rgba(255,255,255,.2); }
-      to { text-shadow: 0 0 35px rgba(255,255,255,.6); }
+    .search-container {
+        max-width: 800px;
+        margin: -30px auto 40px auto; 
+        position: relative;
+        z-index: 10;
+        padding: 0 15px;
     }
 
-    /* ===== CONTENEDOR CATALOGO ===== */
-
-    .catalogo-box {
-      background:white;
-      border-radius:10px;
-      padding:25px;
-      box-shadow:0 2px 10px rgba(0,0,0,.08);
+    .search-container input {
+        height: 60px;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        padding-left: 50px;
+        font-size: 1.1rem;
     }
 
-    .table img { 
-      width:70px; 
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        padding: 20px;
     }
 
-    .precio {
-      font-weight:700;
-      font-size:1.1rem;
-      color:#333;
+    .product-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+    }
+
+    .product-img-box {
+        width: 100%;
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .badge-tech {
+        position: absolute;
+        top: 10px; left: 10px;
+        background: #3483fa;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+
+    .product-info { padding: 20px; }
+    .product-price { font-size: 1.4rem; font-weight: 800; display: block; margin-bottom: 15px; }
+
+    .btn-add {
+        background: #ffd814;
+        border: none;
+        font-weight: 700;
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+    }
     }
 
     /* ===== CARRITO ===== */
@@ -98,7 +140,68 @@
 
 <!-- ===== BANNER ===== -->
 
-<<header class="banner">
+<header class="banner"></header>
+
+<div class="search-container">
+    <div class="position-relative">
+        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">🔍</span>
+        <input type="text" class="form-control" placeholder="Buscar productos...">
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="product-grid">
+        
+        <div class="product-card">
+            <div class="product-img-box">
+                <span class="badge-tech">💻 Tecnología</span>
+                <img src="URL_IMAGEN_NOTEBOOK" alt="Notebook">
+            </div>
+            <div class="product-info">
+                <h5>Notebook Gamer ASUS TUF A15</h5>
+                <span class="product-price">$250.000</span>
+                <button class="btn-add" onclick="agregarAlCarrito('Notebook ASUS', 250000, 1)">Agregar al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-box">
+                <span class="badge-tech">🎧 Tecnología</span>
+                <img src="URL_IMAGEN_AIRPODS" alt="AirPods">
+            </div>
+            <div class="product-info">
+                <h5>Apple AirPods Pro</h5>
+                <span class="product-price">$150.000</span>
+                <button class="btn-add" onclick="agregarAlCarrito('AirPods Pro', 150000, 1)">Agregar al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-box">
+                <span class="badge-tech">📱 Tecnología</span>
+                <img src="URL_IMAGEN_IPHONE" alt="iPhone">
+            </div>
+            <div class="product-info">
+                <h5>iPhone 15 Pro Max</h5>
+                <span class="product-price">$800.000</span>
+                <button class="btn-add" onclick="agregarAlCarrito('iPhone 15 Pro', 800000, 1)">Agregar al carrito</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-box">
+                <span class="badge-tech" style="background:#ff4d4d;">💖 Belleza</span>
+                <img src="URL_IMAGEN_SHAMPOO" alt="Shampoo">
+            </div>
+            <div class="product-info">
+                <h5>Shampoo Profesional Yilho</h5>
+                <span class="product-price">$3.500</span>
+                <button class="btn-add" onclick="agregarAlCarrito('Shampoo Yilho', 3500, 1)">Agregar al carrito</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 </header>
 <!-- ===== CATALOGO ===== -->
 
