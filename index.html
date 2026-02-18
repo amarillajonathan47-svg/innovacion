@@ -12,53 +12,20 @@
       background:#ebebeb; 
     }
 
-   /* ===== BANNER CON TU IMAGEN ===== */
+   /* ===== BANNER LIMPIO (SOLO FONDO) ===== */
 
     .banner {
       position: relative;
-      height: 350px; /* Ajustamos la altura para que se vea como en tu imagen */
-      background-image: url('banner.png1.jpg'); /* ASEGURATE DE QUE EL NOMBRE SEA EXACTO */
+      height: 350px; /* Mantener la altura para que se vea la imagen */
+      background-image: url('banner.png1.jpg'); 
       background-size: cover;
       background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      text-align: center;
+      background-repeat: no-repeat;
+      display: block; /* Ya no necesitamos flex porque no hay texto */
       overflow: hidden;
     }
 
-    /* Quitamos los círculos viejos (::before y ::after) para que no tapen tu imagen */
-    .banner::before, .banner::after {
-      display: none;
-    }
-
-    .banner h1 {
-      font-size: 5rem; /* Más grande, como en tu captura */
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      /* Un brillo sutil para que resalte del fondo espacial */
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.4); 
-      margin: 0;
-    }
-
-.instagram-tag {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    .instagram-tag img {
-      width: 25px;
-      height: 25px;
-      filter: brightness(0) invert(1); /* Hace el logo blanco */
-    }
-    
+    /* Borrá cualquier regla que diga .banner h1 o .instagram-tag para limpiar el código */
     @keyframes glow {
       from { text-shadow: 0 0 10px rgba(255,255,255,.2); }
       to { text-shadow: 0 0 35px rgba(255,255,255,.6); }
@@ -131,12 +98,7 @@
 
 <!-- ===== BANNER ===== -->
 
-<header class="banner">
-  <h1>INNOVACION</h1>
-  <div class="instagram-tag">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="ig">
-    @innovacioin
-  </div>
+<<header class="banner">
 </header>
 <!-- ===== CATALOGO ===== -->
 
