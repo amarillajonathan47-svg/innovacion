@@ -1,76 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>INNOVACION | Catálogo</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INNOVACION | Catálogo</title>
 
-  <!-- Bootstrap + Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    body { background:#f4f6f8; }
+<style>
+body { background:#f4f6f8; }
 
-    /* BANNER */
-    .banner {
-      position: relative;
-      height: 380px;
-      background: url('banner.png') center/cover no-repeat;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      text-align:center;
-    }
-    .banner .overlay{
-      position:absolute;
-      inset:0;
-      background:rgba(0,0,0,.55);
-    }
-    .banner .content{
-      position:relative;
-      z-index:2;
-    }
-    .banner h1{font-size:3rem;font-weight:800;margin-bottom:20px;}
+/* ===== BANNER NUEVO ===== */
 
-    .table img { width:80px; height:auto; }
+.banner {
+  position: relative;
+  height: 420px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed, #ec4899);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  color:#fff;
+}
 
-    .carrito-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #343a40;
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      z-index: 1000;
-    }
+.banner::before{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:rgba(255,255,255,0.08);
+  border-radius:50%;
+  filter:blur(90px);
+}
 
-    .btn-whatsapp { background:#25d366; color:#fff; }
-  </style>
+.banner img{
+  position:absolute;
+  height:100%;
+  object-fit:contain;
+  opacity:.9;
+}
+
+.banner h1{
+  position:relative;
+  z-index:2;
+  font-size:4rem;
+  font-weight:900;
+  letter-spacing:6px;
+  text-transform:uppercase;
+  text-shadow:0 10px 30px rgba(0,0,0,.35);
+  animation:flotar 3s ease-in-out infinite;
+}
+
+@keyframes flotar{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+  100%{transform:translateY(0)}
+}
+
+.table img { width:80px; }
+
+.carrito-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #343a40;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.btn-whatsapp { background:#25d366; color:#fff; }
+.btn-vaciar { background:#dc3545; color:#fff; }
+</style>
 </head>
+
 <body>
 
 <header class="banner">
-  <div class="overlay"></div>
-  <div class="content">
-    <h1>INNOVACIÓN</h1>
-    <a href="#catalogo" class="btn btn-primary btn-lg">COMPRAR YA</a>
-  </div>
+  <img src="banner.png">
+  <h1>Innovación</h1>
 </header>
 
 <div id="catalogo" class="container my-4">
 
-  <!-- BUSCADOR -->
   <div class="row mb-3">
     <div class="col-md-4 ms-auto">
       <input type="text" class="form-control" placeholder="Buscar...">
     </div>
   </div>
 
-  <!-- TABLA CATALOGO (TODO EN BLANCO PARA EDITAR) -->
   <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle bg-white">
       <thead class="table-dark">
@@ -85,31 +106,18 @@
       </thead>
       <tbody>
 
-        <!-- FILA MODELO (COPIAR Y PEGAR) -->
         <tr>
-          <td><img src="" alt=""></td>
-          <td></td>
-          <td></td>
+          <td><img src=""></td>
+          <td>Shampoo Yilho</td>
+          <td>$3500</td>
           <td></td>
           <td></td>
           <td style="width:120px;">
-           <input
-  type="number"
-  class="form-control mb-1"
-  min="1"
-  value="1"
-  id="qty-shampoo"
->
-<button
-  class="btn btn-sm btn-primary w-100"
-  onclick="agregarAlCarrito(
-    'Shampoo Yilho',
-    3500,
-    document.getElementById('qty-shampoo').value
-  )">
-  Pedir
-</button>
-
+            <input type="number" class="form-control mb-1" min="1" value="1" id="qty-shampoo">
+            <button class="btn btn-sm btn-primary w-100"
+              onclick="agregarAlCarrito('Shampoo Yilho', 3500, document.getElementById('qty-shampoo').value)">
+              Pedir
+            </button>
           </td>
         </tr>
 
@@ -120,45 +128,69 @@
   <div class="d-flex justify-content-center gap-2 my-4" id="paginacion"></div>
 </div>
 
-<!-- BARRA CARRITO -->
+<!-- MINI CARRITO -->
+<div id="miniCarrito" style="
+  display:none;
+  position:fixed;
+  bottom:70px;
+  right:20px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 0 15px rgba(0,0,0,.2);
+  padding:15px;
+  width:300px;
+  z-index:2000;
+">
+  <h6>🛒 Carrito</h6>
+  <div id="listaCarrito"></div>
+  <hr>
+  <strong>Total: $<span id="totalCarrito">0</span></strong>
+
+  <button class="btn btn-vaciar w-100 mt-3" onclick="vaciarCarrito()">
+    Vaciar carrito
+  </button>
+</div>
+
+<!-- BARRA -->
 <div class="carrito-bar">
- <button class="btn btn-dark" onclick="toggleCarrito()">
+  <button class="btn btn-dark" onclick="toggleCarrito()">
     🛒 (<span id="cantidad_carrito">0</span>)
   </button>
+
   <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">
     Enviar Pedido
   </button>
 </div>
 
 <script>
-  /* PAGINACIÓN 10 PRODUCTOS */
-  const filas = Array.from(document.querySelectorAll('tbody tr'));
-  const porPagina = 10;
-  let paginaActual = 1;
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+renderCarrito();
 
-  function mostrarPagina(p){
-    paginaActual = p;
-    filas.forEach((fila,i)=>{
-      fila.style.display = (i >= (p-1)*porPagina && i < p*porPagina) ? '' : 'none';
-    });
-    renderPaginas();
+/* PAGINACIÓN */
+const filas = Array.from(document.querySelectorAll('tbody tr'));
+const porPagina = 10;
+let paginaActual = 1;
+
+function mostrarPagina(p){
+  paginaActual = p;
+  filas.forEach((fila,i)=>{
+    fila.style.display = (i >= (p-1)*porPagina && i < p*porPagina) ? '' : 'none';
+  });
+  renderPaginas();
+}
+
+function renderPaginas(){
+  const total = Math.ceil(filas.length / porPagina);
+  let html = '';
+  for(let i=1;i<=total;i++){
+    html += `<button class="btn btn-sm ${i===paginaActual?'btn-dark':'btn-outline-dark'}" onclick="mostrarPagina(${i})">${i}</button>`;
   }
+  document.getElementById('paginacion').innerHTML = html;
+}
+mostrarPagina(1);
 
-  function renderPaginas(){
-    const total = Math.ceil(filas.length / porPagina);
-    let html = '';
-    for(let i=1;i<=total;i++){
-      html += `<button class="btn btn-sm ${i===paginaActual?'btn-dark':'btn-outline-dark'}" onclick="mostrarPagina(${i})">${i}</button>`;
-    }
-    document.getElementById('paginacion').innerHTML = html;
-  }
-
-  mostrarPagina(1);
-
-  /* CARRITO */
-  let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-  actualizarCantidad();
- function agregarAlCarrito(nombre, precio, cantidad) {
+/* CARRITO */
+function agregarAlCarrito(nombre, precio, cantidad) {
   cantidad = Number(cantidad);
   precio = Number(precio);
 
@@ -167,19 +199,63 @@
   if (existe) {
     existe.cantidad += cantidad;
   } else {
-    carrito.push({
-      nombre,
-      precio,
-      cantidad
-    });
+    carrito.push({ nombre, precio, cantidad });
   }
+
+  renderCarrito();
+}
+
+function renderCarrito() {
+  let html = '';
+  let total = 0;
+  let cantidadTotal = 0;
+
+  carrito.forEach((p,i)=>{
+    total += p.precio * p.cantidad;
+    cantidadTotal += p.cantidad;
+
+    html += `
+      <div class="border-bottom mb-2 pb-2">
+        <strong>${p.nombre}</strong><br>
+        $${p.precio}
+        <div>
+          <button onclick="cambiarCantidad(${i},-1)">−</button>
+          <span class="mx-2">${p.cantidad}</span>
+          <button onclick="cambiarCantidad(${i},1)">+</button>
+          <button onclick="eliminarProducto(${i})">🗑</button>
+        </div>
+      </div>`;
+  });
+
+  document.getElementById('listaCarrito').innerHTML = html;
+  document.getElementById('totalCarrito').innerText = total;
+  document.getElementById('cantidad_carrito').innerText = cantidadTotal;
 
   localStorage.setItem('carrito', JSON.stringify(carrito));
-  renderCarrito();
-   
-  }
+}
 
- function enviarWhatsApp() {
+function cambiarCantidad(i, cambio){
+  carrito[i].cantidad += cambio;
+  if(carrito[i].cantidad <= 0) carrito.splice(i,1);
+  renderCarrito();
+}
+
+function eliminarProducto(i){
+  carrito.splice(i,1);
+  renderCarrito();
+}
+
+function vaciarCarrito(){
+  carrito = [];
+  renderCarrito();
+}
+
+function toggleCarrito() {
+  const box = document.getElementById('miniCarrito');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function enviarWhatsApp() {
   if (carrito.length === 0) {
     alert('El carrito está vacío');
     return;
@@ -195,92 +271,10 @@
 
   mensaje += `%0ATotal: $${total}`;
 
-  const numero = '5491158165717';
-  window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank');
-}
-
-/* ABRIR / CERRAR CARRITO */
-function toggleCarrito() {
-  const box = document.getElementById('miniCarrito');
-  box.style.display = box.style.display === 'none' ? 'block' : 'none';
-  renderCarrito();
-}
-
-/* DIBUJAR CARRITO */
-function renderCarrito() {
-
-  let html = '';
-  let total = 0;
-  let cantidadTotal = 0;
-
-  carrito.forEach((p,i)=>{
-
-    total += p.precio * p.cantidad;
-    cantidadTotal += p.cantidad;
-
-    html += `
-      <div class="border-bottom mb-2 pb-2">
-        <strong>${p.nombre}</strong><br>
-        $${p.precio}
-
-        <div class="mt-1">
-          <button onclick="cambiarCantidad(${i},-1)">−</button>
-          <span class="mx-2">${p.cantidad}</span>
-          <button onclick="cambiarCantidad(${i},1)">+</button>
-          <button onclick="eliminarProducto(${i})">🗑</button>
-        </div>
-      </div>
-    `;
-  });
-
-  document.getElementById('listaCarrito').innerHTML = html;
-  document.getElementById('totalCarrito').innerText = total;
-  document.getElementById('cantidad_carrito').innerText = cantidadTotal;
-
-  localStorage.setItem('carrito', JSON.stringify(carrito));
-}
-
-/* SUMAR / RESTAR */
-function cambiarCantidad(i, cambio){
-
-  carrito[i].cantidad += cambio;
-
-  if(carrito[i].cantidad <= 0){
-    carrito.splice(i,1);
-  }
-
-  renderCarrito();
-}
-
-/* ELIMINAR */
-function eliminarProducto(i){
-  carrito.splice(i,1);
-  renderCarrito();
+  window.open(`https://wa.me/5491158165717?text=${mensaje}`, '_blank');
 }
 </script>
-</div>
-</body
-  <!-- MINI CARRITO -->
-<div id="miniCarrito" style="
-  display:none;
-  position:fixed;
-  bottom:70px;
-  right:20px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 0 15px rgba(0,0,0,.2);
-  padding:15px;
-  width:300px;
-  z-index:2000;
-">
 
-  <h6>🛒 Carrito</h6>
+</body>
+</html>
 
-  <div id="listaCarrito"></div>
-
-  <hr>
-
-  <strong>Total: $<span id="totalCarrito">0</span></strong>
-
-</div>
-</html
