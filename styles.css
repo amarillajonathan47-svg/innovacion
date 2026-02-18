@@ -1,45 +1,72 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #f5f5f5;
+    background: #ebebeb; /* gris Mercado Libre */
 }
 
-/* BANNER */
+/* ===== HERO / BANNER ===== */
 
 .banner {
-    background-image: url("https://images.unsplash.com/photo-1639322537228-f710d846310a");
-    background-size: cover;
-    background-position: center;
-    height: 260px;
+    background: linear-gradient(135deg, #ffe600, #ffd000);
+    height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* efecto visual tipo ML */
+
+.banner::before {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    top: -200px;
+    right: -150px;
+}
+
+.banner::after {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    bottom: -180px;
+    left: -120px;
 }
 
 .banner-overlay {
     text-align: center;
     width: 100%;
+    z-index: 2;
 }
+
+/* TITULO PROTAGONISTA */
 
 .banner h1 {
-    color: white;
-    font-size: 48px;
+    font-size: 56px;
     margin: 0 0 25px 0;
-    text-shadow: 0 0 15px rgba(0,0,0,0.6);
+    color: #333;
+    font-weight: bold;
 }
 
-/* BUSCADOR PRINCIPAL */
+/* ===== BUSCADOR PRINCIPAL ===== */
 
 .search-main {
     background: white;
-    width: 60%;
+    width: 55%;
     margin: auto;
-    padding: 14px;
-    border-radius: 8px;
+    padding: 16px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    gap: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 .search-main i {
@@ -54,7 +81,7 @@ body {
     font-size: 16px;
 }
 
-/* BUSCADOR SECUNDARIO */
+/* ===== BUSCADOR SECUNDARIO ===== */
 
 .search-bar {
     background: white;
@@ -65,6 +92,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .search-bar input {
@@ -73,21 +101,27 @@ body {
     width: 100%;
 }
 
-/* PRODUCTOS */
+/* ===== PRODUCTOS ===== */
 
 .products {
     display: flex;
     gap: 15px;
-    padding: 0 20px 30px;
+    padding: 10px 20px 30px;
 }
 
 .card {
     background: white;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 12px;
+    padding: 12px;
     width: 250px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: relative;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
 .card img {
@@ -97,36 +131,47 @@ body {
 
 .card h3 {
     margin: 10px 0 5px;
+    font-size: 15px;
+    font-weight: normal;
 }
 
 .card p {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
+    margin: 5px 0 10px;
 }
 
-/* TAGS */
+/* ===== TAGS ===== */
 
 .tag {
     position: absolute;
     top: 10px;
     left: 10px;
-    padding: 5px 10px;
+    padding: 6px 12px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 11px;
     color: white;
+    font-weight: bold;
 }
 
-.tech { background: #1976d2; }
+.tech { background: #3483fa; }
 .beauty { background: #e91e63; }
 
-/* BOTÓN */
+/* ===== BOTÓN ===== */
 
 button {
     width: 100%;
-    padding: 10px;
+    padding: 11px;
     border: none;
     border-radius: 6px;
-    background: #ffd600;
+    background: #3483fa;
+    color: white;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
 }
+
+button:hover {
+    background: #2968c8;
+}
+
