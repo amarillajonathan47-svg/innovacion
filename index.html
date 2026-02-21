@@ -45,7 +45,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     background: white;
     padding: 20px;
     border-radius: 20px;
-    height: fit-content;
 }
 
 .product-grid {
@@ -69,8 +68,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     padding: 15px;
 }
 
-.product-img-box img { max-width: 100%; max-height: 100%; }
-
 .product-info { padding: 15px; text-align: center; }
 
 .product-price { font-size: 1.3rem; font-weight: bold; }
@@ -84,23 +81,32 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     border-radius: 10px;
 }
 
+/* PANEL DERECHO */
 .carrito-bar {
     position: fixed;
     right: 20px;
     bottom: 30px;
-    background: rgba(255,255,255,0.95);
+    background: white;
     padding: 15px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    z-index: 2000;
-    width: 170px;
+    width: 190px;
 }
 
-.carrito-bar button { width: 100%; }
+/* BADGE ROJO */
+.badge-cart {
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    margin-left: 5px;
+}
 
+/* MINI CARRITO */
 #miniCarrito {
     display: none;
     position: fixed;
@@ -111,7 +117,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     padding: 20px;
-    z-index: 3000;
 }
 
 .qty-btn {
@@ -120,6 +125,28 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     width: 25px;
     height: 25px;
     border-radius: 6px;
+}
+
+/* PAGINACIÓN */
+.pagination-custom {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.page-btn {
+    border: none;
+    background: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.page-active {
+    background: #0d6efd;
+    color: white;
 }
 </style>
 </head>
@@ -152,10 +179,16 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     <div>
         <div class="product-grid" id="contenedorProductos"></div>
 
-        <div class="d-flex justify-content-center mt-4">
-            <button class="btn btn-sm btn-dark me-2" onclick="cambiarPagina(-1)">Anterior</button>
-            <span id="paginaActual" class="align-self-center"></span>
-            <button class="btn btn-sm btn-dark ms-2" onclick="cambiarPagina(1)">Siguiente</button>
+        <!-- PAGINACIÓN -->
+        <div class="pagination-custom">
+            <button class="page-btn" onclick="cambiarPagina(-1)">◀</button>
+
+            <button class="page-btn" id="p1" onclick="irPagina(1)">1</button>
+            <button class="page-btn" id="p2" onclick="irPagina(2)">2</button>
+            <button class="page-btn" id="p3" onclick="irPagina(3)">3</button>
+            <button class="page-btn" id="p4" onclick="irPagina(4)">4</button>
+
+            <button class="page-btn" onclick="cambiarPagina(1)">▶</button>
         </div>
     </div>
 
@@ -182,7 +215,7 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 <!-- PANEL DERECHO -->
 <div class="carrito-bar">
     <button class="btn btn-dark btn-sm" onclick="toggleCarrito()">
-        🛒 Ver Carrito (<span id="cantidad_carrito">0</span>)
+        🛒 Ver Carrito <span class="badge-cart" id="cantidad_carrito">0</span>
     </button>
 
     <button class="btn btn-success btn-sm" onclick="enviarWhatsApp()">
@@ -208,7 +241,7 @@ let categoriaActiva = 'Todos';
 let pagina = 1;
 
 const porPagina = 15;
-const maxPaginas = 4; // TEMPORAL
+const maxPaginas = 4;
 
 function aplicarFiltros() {
     const texto = document.getElementById('inputBuscador').value.toLowerCase();
@@ -229,14 +262,11 @@ function filtrarCategoria(cat) {
 
 function renderProductos(lista) {
 
+    if (pagina < 1) pagina = 1;
+    if (pagina > maxPaginas) pagina = maxPaginas;
+
     const contenedor = document.getElementById('contenedorProductos');
     contenedor.innerHTML = '';
-
-    const totalPaginasReal = Math.ceil(lista.length / porPagina);
-    const totalPaginas = Math.min(totalPaginasReal, maxPaginas);
-
-    if (pagina < 1) pagina = 1;
-    if (pagina > totalPaginas) pagina = totalPaginas;
 
     const inicio = (pagina - 1) * porPagina;
     const paginaProductos = lista.slice(inicio, inicio + porPagina);
@@ -258,8 +288,14 @@ function renderProductos(lista) {
         `;
     });
 
-    document.getElementById('paginaActual').innerText =
-        `Página ${pagina} / ${totalPaginas || 1}`;
+    actualizarPaginacion();
+}
+
+function actualizarPaginacion() {
+    for(let i=1;i<=4;i++){
+        document.getElementById('p'+i).classList.remove('page-active');
+    }
+    document.getElementById('p'+pagina).classList.add('page-active');
 }
 
 function cambiarPagina(dir) {
@@ -268,6 +304,11 @@ function cambiarPagina(dir) {
     if (pagina < 1) pagina = 1;
     if (pagina > maxPaginas) pagina = maxPaginas;
 
+    aplicarFiltros();
+}
+
+function irPagina(num) {
+    pagina = num;
     aplicarFiltros();
 }
 
