@@ -1,11 +1,11 @@
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>INNOVACION | Catálogo</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
@@ -22,7 +22,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 .search-container {
     max-width: 800px;
     margin: -30px auto 40px auto;
-    z-index: 10;
     padding: 0 15px;
 }
 
@@ -88,28 +87,32 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 
 .carrito-bar {
     position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    padding: 10px 20px;
-    border-radius: 50px;
+    right: 20px;
+    bottom: 30px;
+    background: rgba(255,255,255,0.95);
+    padding: 15px;
+    border-radius: 20px;
     display: flex;
-    gap: 15px;
+    flex-direction: column;
+    gap: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 2000;
+    width: 170px;
 }
+
+.carrito-bar button { width: 100%; }
 
 #miniCarrito {
     display: none;
     position: fixed;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 20px;
+    bottom: 200px;
     background: white;
     width: 340px;
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     padding: 20px;
+    z-index: 3000;
 }
 
 .qty-btn {
@@ -140,19 +143,16 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     <div class="filters">
         <h6 class="fw-bold">Filtros</h6>
 
-        <div>
-            <input type="radio" name="cat" onclick="filtrarCategoria('Todos')" checked> Todos<br>
-            <input type="radio" name="cat" onclick="filtrarCategoria('Tecnología')"> Tecnología<br>
-            <input type="radio" name="cat" onclick="filtrarCategoria('Electrodomésticos')"> Electrodomésticos<br>
-            <input type="radio" name="cat" onclick="filtrarCategoria('Celulares')"> Celulares
-        </div>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Todos')" checked> Todos<br>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Tecnología')"> Tecnología<br>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Electrodomésticos')"> Electrodomésticos<br>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Celulares')"> Celulares
     </div>
 
     <!-- PRODUCTOS -->
     <div>
         <div class="product-grid" id="contenedorProductos"></div>
 
-        <!-- PAGINACIÓN -->
         <div class="d-flex justify-content-center mt-4">
             <button class="btn btn-sm btn-dark me-2" onclick="cambiarPagina(-1)">Anterior</button>
             <span id="paginaActual" class="align-self-center"></span>
@@ -173,26 +173,25 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     </div>
 </div>
 
+<!-- PANEL DERECHO -->
 <div class="carrito-bar">
     <button class="btn btn-dark btn-sm" onclick="toggleCarrito()">
-        🛒 (<span id="cantidad_carrito">0</span>)
+        🛒 Ver Carrito (<span id="cantidad_carrito">0</span>)
     </button>
+
     <button class="btn btn-success btn-sm" onclick="enviarWhatsApp()">
         Enviar Pedido
+    </button>
+
+    <button class="btn btn-danger btn-sm" onclick="vaciarCarrito()">
+        Vaciar Carrito
     </button>
 </div>
 
 <script>
-const productos = [
-    { id: 1, nombre: 'Notebook Gamer', precio: 250000, cat: 'Tecnología', img: 'https://m.media-amazon.com/images/I/71f5Eu5lJSL._AC_SL1500_.jpg' },
-    { id: 2, nombre: 'Heladera Samsung', precio: 500000, cat: 'Electrodomésticos', img: 'https://m.media-amazon.com/images/I/71WkDp--uqL.jpg' },
-    { id: 3, nombre: 'iPhone 15', precio: 800000, cat: 'Celulares', img: 'https://m.media-amazon.com/images/I/81Os1neOnzL._AC_SL1500_.jpg' },
-    { id: 4, nombre: 'Smart TV LG', precio: 420000, cat: 'Electrodomésticos', img: 'https://m.media-amazon.com/images/I/71l2D7T1ZIL.jpg' },
-    { id: 5, nombre: 'Auriculares Pro', precio: 75000, cat: 'Tecnología', img: 'https://m.media-amazon.com/images/I/61SUj2W5yXL._AC_SL1500_.jpg' },
-    // duplicamos para simular muchos productos
-];
+const productos = [];
 
-for(let i=6;i<=40;i++){
+for(let i=1;i<=50;i++){
     productos.push({
         id:i,
         nombre:'Producto '+i,
@@ -251,7 +250,8 @@ function renderProductos(lista) {
         `;
     });
 
-    document.getElementById('paginaActual').innerText = `Página ${pagina} / ${totalPaginas || 1}`;
+    document.getElementById('paginaActual').innerText =
+        `Página ${pagina} / ${totalPaginas || 1}`;
 }
 
 function cambiarPagina(dir) {
@@ -300,6 +300,11 @@ function modificarCantidad(nombre, cambio) {
     if (prod.cantidad <= 0)
         carrito = carrito.filter(p => p.nombre !== nombre);
 
+    actualizarCarrito();
+}
+
+function vaciarCarrito() {
+    carrito = [];
     actualizarCarrito();
 }
 
