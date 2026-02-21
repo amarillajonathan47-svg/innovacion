@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -165,12 +164,19 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 <!-- MINI CARRITO -->
 <div id="miniCarrito">
     <h6 class="fw-bold">🛒 Tu Pedido</h6>
+
     <div id="listaCarrito"></div>
+
     <hr>
-    <div class="d-flex justify-content-between">
+
+    <div class="d-flex justify-content-between mb-3">
         <span>Total:</span>
         <span class="fw-bold">$<span id="totalCarrito">0</span></span>
     </div>
+
+    <button class="btn btn-danger btn-sm w-100" onclick="vaciarCarrito()">
+        Vaciar Carrito
+    </button>
 </div>
 
 <!-- PANEL DERECHO -->
@@ -182,16 +188,12 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     <button class="btn btn-success btn-sm" onclick="enviarWhatsApp()">
         Enviar Pedido
     </button>
-
-    <button class="btn btn-danger btn-sm" onclick="vaciarCarrito()">
-        Vaciar Carrito
-    </button>
 </div>
 
 <script>
 const productos = [];
 
-for(let i=1;i<=50;i++){
+for(let i=1;i<=60;i++){
     productos.push({
         id:i,
         nombre:'Producto '+i,
@@ -204,7 +206,9 @@ for(let i=1;i<=50;i++){
 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 let categoriaActiva = 'Todos';
 let pagina = 1;
+
 const porPagina = 15;
+const maxPaginas = 4; // TEMPORAL
 
 function aplicarFiltros() {
     const texto = document.getElementById('inputBuscador').value.toLowerCase();
@@ -224,11 +228,15 @@ function filtrarCategoria(cat) {
 }
 
 function renderProductos(lista) {
+
     const contenedor = document.getElementById('contenedorProductos');
     contenedor.innerHTML = '';
 
-    const totalPaginas = Math.ceil(lista.length / porPagina);
-    if(pagina > totalPaginas) pagina = totalPaginas || 1;
+    const totalPaginasReal = Math.ceil(lista.length / porPagina);
+    const totalPaginas = Math.min(totalPaginasReal, maxPaginas);
+
+    if (pagina < 1) pagina = 1;
+    if (pagina > totalPaginas) pagina = totalPaginas;
 
     const inicio = (pagina - 1) * porPagina;
     const paginaProductos = lista.slice(inicio, inicio + porPagina);
@@ -256,6 +264,10 @@ function renderProductos(lista) {
 
 function cambiarPagina(dir) {
     pagina += dir;
+
+    if (pagina < 1) pagina = 1;
+    if (pagina > maxPaginas) pagina = maxPaginas;
+
     aplicarFiltros();
 }
 
