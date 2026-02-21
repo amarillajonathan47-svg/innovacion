@@ -18,20 +18,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     background-position: center;
 }
 
-.search-container {
-    max-width: 800px;
-    margin: -30px auto 40px auto;
-    padding: 0 15px;
-}
-
-.search-container input {
-    height: 60px;
-    border-radius: 12px;
-    border: none;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    padding-left: 50px;
-}
-
 .layout {
     display: grid;
     grid-template-columns: 260px 1fr;
@@ -46,21 +32,8 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     background: white;
     border-radius: 20px;
     padding: 15px;
-}
-
-.filter-header {
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.filter-content {
-    margin-top: 10px;
-}
-
-.collapsed .filter-content {
-    display: none;
+    position: sticky;
+    top: 20px;
 }
 
 .product-grid {
@@ -74,6 +47,7 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: relative;
 }
 
 .product-img-box {
@@ -81,14 +55,9 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
 }
 
-.product-img-box img { max-width: 100%; max-height: 100%; }
-
 .product-info { padding: 15px; text-align: center; }
-
-.product-price { font-size: 1.3rem; font-weight: bold; }
 
 .btn-add {
     background: #ffd814;
@@ -96,36 +65,25 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     font-weight: bold;
     padding: 10px;
     border-radius: 10px;
-    flex: 1;
-}
-
-.btn-eye {
-    border: none;
-    background: #eee;
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 18px;
+    width: 100%;
 }
 
 .carrito-bar {
     position: fixed;
     right: 20px;
     bottom: 30px;
-    background: rgba(255,255,255,0.95);
+    background: white;
     padding: 15px;
     border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    width: 200px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    width: 190px;
 }
 
 #miniCarrito {
     display: none;
     position: fixed;
     right: 20px;
-    bottom: 240px;
+    bottom: 260px;
     background: white;
     width: 360px;
     border-radius: 20px;
@@ -139,19 +97,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     width: 28px;
     height: 28px;
     border-radius: 6px;
-    font-weight: bold;
-}
-
-.modal-product-img {
-    width: 100%;
-    border-radius: 15px;
-}
-
-.qty-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
 }
 </style>
 </head>
@@ -160,102 +105,76 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 
 <header class="banner"></header>
 
-<div class="search-container">
-    <div class="position-relative">
-        <span class="position-absolute top-50 start-0 translate-middle-y ms-3">🔍</span>
-        <input type="text" id="inputBuscador" class="form-control"
-               placeholder="¿Qué estás buscando hoy?" onkeyup="aplicarFiltros()">
-    </div>
-</div>
-
 <div class="layout">
 
     <!-- FILTROS -->
-    <div class="filters collapsed" id="panelFiltros">
+    <div class="filters">
 
-        <div class="filter-header" onclick="toggleFiltros()">
-            <span>Filtros</span>
-            <span id="flechaFiltros">▼</span>
-        </div>
+        <strong>Categoría</strong><br>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Todos')" checked> Todos<br>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Tecnología')"> Tecnología<br>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Electrodomésticos')"> Electrodomésticos<br>
+        <input type="radio" name="cat" onclick="filtrarCategoria('Celulares')"> Celulares
 
-        <div class="filter-content">
-            <input type="radio" name="cat" onclick="filtrarCategoria('Todos')" checked> Todos<br>
-            <input type="radio" name="cat" onclick="filtrarCategoria('Tecnología')"> Tecnología<br>
-            <input type="radio" name="cat" onclick="filtrarCategoria('Electrodomésticos')"> Electrodomésticos<br>
-            <input type="radio" name="cat" onclick="filtrarCategoria('Celulares')"> Celulares
-        </div>
+        <hr>
+
+        <strong>Precio</strong>
+        <input type="number" id="precioMin" class="form-control form-control-sm mb-2"
+               placeholder="Mínimo" onkeyup="aplicarFiltros()">
+
+        <input type="number" id="precioMax" class="form-control form-control-sm"
+               placeholder="Máximo" onkeyup="aplicarFiltros()">
     </div>
 
     <!-- PRODUCTOS -->
     <div>
 
         <div class="d-flex justify-content-between mb-3">
-            <div><strong id="contadorProductos">0</strong> productos encontrados</div>
+            <div><strong id="contadorProductos">0</strong> productos</div>
 
             <select class="form-select form-select-sm w-auto" onchange="ordenarProductos(this.value)">
                 <option value="default">Ordenar</option>
-                <option value="mayor">Precio: Mayor a menor</option>
-                <option value="menor">Precio: Menor a mayor</option>
+                <option value="mayor">Precio: Mayor</option>
+                <option value="menor">Precio: Menor</option>
             </select>
         </div>
 
         <div class="product-grid" id="contenedorProductos"></div>
-    </div>
 
-</div>
-
-<!-- MODAL -->
-<div class="modal fade" id="modalProducto" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content rounded-4">
-      <div class="modal-body">
-
-        <div id="carouselProducto" class="carousel slide">
-          <div class="carousel-inner" id="carouselInner"></div>
-
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducto" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselProducto" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
+        <!-- PAGINACIÓN -->
+        <div class="d-flex justify-content-center gap-2 mt-4">
+            <button class="btn btn-outline-dark btn-sm" onclick="cambiarPagina(1)">1</button>
+            <button class="btn btn-outline-dark btn-sm" onclick="cambiarPagina(2)">2</button>
+            <button class="btn btn-outline-dark btn-sm" onclick="cambiarPagina(3)">3</button>
+            <button class="btn btn-outline-dark btn-sm" onclick="cambiarPagina(4)">4</button>
         </div>
 
-        <hr>
-
-        <div id="modalInfo"></div>
-
-        <div class="qty-box mt-3">
-            <button class="qty-btn" onclick="restarModal()">−</button>
-            <span id="cantidadModal">1</span>
-            <button class="qty-btn" onclick="sumarModal()">+</button>
-        </div>
-
-        <button class="btn btn-warning w-100 mt-3" onclick="agregarDesdeModal()">
-            Agregar al carrito
-        </button>
-
-      </div>
     </div>
-  </div>
+
 </div>
 
 <!-- MINI CARRITO -->
 <div id="miniCarrito">
     <h6>🛒 Tu Pedido</h6>
     <div id="listaCarrito"></div>
+
     <hr>
+
     Total: $<span id="totalCarrito">0</span>
+
+    <button class="btn btn-danger btn-sm w-100 mt-3"
+            onclick="vaciarCarrito()">
+        Vaciar carrito
+    </button>
 </div>
 
 <!-- PANEL DERECHO -->
 <div class="carrito-bar">
-    <button class="btn btn-dark btn-sm" onclick="toggleCarrito()">
+    <button class="btn btn-dark btn-sm w-100 mb-2" onclick="toggleCarrito()">
         🛒 Ver Carrito (<span id="cantidad_carrito">0</span>)
     </button>
 
-    <button class="btn btn-success btn-sm" onclick="enviarWhatsApp()">
+    <button class="btn btn-success btn-sm w-100" onclick="enviarWhatsApp()">
         Enviar Pedido
     </button>
 </div>
@@ -263,18 +182,13 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 <script>
 const productos = [];
 
-for(let i=1;i<=30;i++){
+for(let i=1;i<=60;i++){
     productos.push({
         id:i,
         nombre:'Producto '+i,
         precio:Math.floor(Math.random()*90000)+10000,
         cat:['Tecnología','Electrodomésticos','Celulares'][Math.floor(Math.random()*3)],
-        imgs:[
-            'https://via.placeholder.com/600',
-            'https://via.placeholder.com/600/aaaaaa',
-            'https://via.placeholder.com/600/cccccc'
-        ],
-        descripcion:'Descripción profesional del producto '+i
+        img:'https://via.placeholder.com/400'
     });
 }
 
@@ -282,108 +196,76 @@ let carrito = [];
 let categoriaActiva = 'Todos';
 let ordenActual = 'default';
 
-let productoModal = null;
-let cantidadModal = 1;
+let paginaActual = 1;
+const productosPorPagina = 15;
 
-function toggleFiltros(){
-    const panel = document.getElementById('panelFiltros');
-    panel.classList.toggle('collapsed');
-    document.getElementById('flechaFiltros').innerText =
-        panel.classList.contains('collapsed') ? '▼' : '▲';
-}
+function aplicarFiltros(){
 
-function aplicarFiltros() {
-    const texto = document.getElementById('inputBuscador').value.toLowerCase();
+    const min = Number(precioMin.value) || 0;
+    const max = Number(precioMax.value) || Infinity;
 
     let filtrados = productos.filter(p =>
-        p.nombre.toLowerCase().includes(texto) &&
-        (categoriaActiva === 'Todos' || p.cat === categoriaActiva)
+        (categoriaActiva === 'Todos' || p.cat === categoriaActiva) &&
+        p.precio >= min &&
+        p.precio <= max
     );
 
     if (ordenActual === 'mayor') filtrados.sort((a,b)=>b.precio-a.precio);
     if (ordenActual === 'menor') filtrados.sort((a,b)=>a.precio-b.precio);
 
-    document.getElementById('contadorProductos').innerText = filtrados.length;
+    contadorProductos.innerText = filtrados.length;
 
-    renderProductos(filtrados);
+    renderProductos(filadosPorPagina(filtrados));
+}
+
+function filadosPorPagina(lista){
+
+    const inicio = (paginaActual - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+
+    return lista.slice(inicio, fin);
+}
+
+function cambiarPagina(num){
+
+    if(num < 1) num = 1;
+    if(num > 4) num = 4;
+
+    paginaActual = num;
+
+    aplicarFiltros();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function ordenarProductos(tipo){ ordenActual = tipo; aplicarFiltros(); }
-function filtrarCategoria(cat){ categoriaActiva = cat; aplicarFiltros(); }
+function filtrarCategoria(cat){ categoriaActiva = cat; paginaActual = 1; aplicarFiltros(); }
 
 function renderProductos(lista){
-    const contenedor = document.getElementById('contenedorProductos');
-    contenedor.innerHTML = '';
+    contenedorProductos.innerHTML = '';
 
     lista.forEach(p=>{
-        contenedor.innerHTML += `
+        contenedorProductos.innerHTML += `
             <div class="product-card">
                 <div class="product-img-box">
-                    <img src="${p.imgs[0]}">
+                    <img src="${p.img}">
                 </div>
                 <div class="product-info">
                     <h6>${p.nombre}</h6>
-                    <div class="product-price">$${p.precio.toLocaleString()}</div>
+                    <div>$${p.precio.toLocaleString()}</div>
 
-                    <div class="d-flex gap-2 mt-2">
-                        <button class="btn-add" onclick="agregarAlCarrito('${p.nombre}', ${p.precio})">
-                            Agregar
-                        </button>
-
-                        <button class="btn-eye" onclick="verProducto(${p.id})">
-                            👁
-                        </button>
-                    </div>
+                    <button class="btn-add mt-2"
+                            onclick="agregarAlCarrito('${p.nombre}', ${p.precio})">
+                        Agregar
+                    </button>
                 </div>
-            </div>
-        `;
+            </div>`;
     });
 }
 
-function verProducto(id){
-    productoModal = productos.find(p=>p.id===id);
-    cantidadModal = 1;
-
-    const inner = document.getElementById('carouselInner');
-    inner.innerHTML = '';
-
-    productoModal.imgs.forEach((img,i)=>{
-        inner.innerHTML += `
-            <div class="carousel-item ${i===0?'active':''}">
-                <img src="${img}" class="modal-product-img">
-            </div>
-        `;
-    });
-
-    document.getElementById('modalInfo').innerHTML = `
-        <h5>${productoModal.nombre}</h5>
-        <div class="fw-bold">$${productoModal.precio.toLocaleString()}</div>
-        <p class="text-muted">${productoModal.descripcion}</p>
-    `;
-
-    document.getElementById('cantidadModal').innerText = cantidadModal;
-
-    new bootstrap.Modal(document.getElementById('modalProducto')).show();
-}
-
-function sumarModal(){
-    cantidadModal++;
-    document.getElementById('cantidadModal').innerText = cantidadModal;
-}
-
-function restarModal(){
-    if(cantidadModal>1) cantidadModal--;
-    document.getElementById('cantidadModal').innerText = cantidadModal;
-}
-
-function agregarDesdeModal(){
-    agregarAlCarrito(productoModal.nombre, productoModal.precio, cantidadModal);
-}
-
-function agregarAlCarrito(nombre, precio, cantidad=1){
+function agregarAlCarrito(nombre, precio){
     let existe = carrito.find(p=>p.nombre===nombre);
-    if(existe) existe.cantidad += cantidad;
-    else carrito.push({nombre, precio, cantidad});
+    if(existe) existe.cantidad++;
+    else carrito.push({nombre, precio, cantidad:1});
     actualizarCarrito();
 }
 
@@ -395,9 +277,8 @@ function actualizarCarrito(){
         cant += p.cantidad;
 
         html += `
-        <div class="d-flex justify-content-between align-items-center mb-2 small">
+        <div class="d-flex justify-content-between mb-2 small">
             <span>${p.nombre}</span>
-
             <div>
                 <button class="qty-btn" onclick="restar('${p.nombre}')">−</button>
                 ${p.cantidad}
@@ -406,9 +287,9 @@ function actualizarCarrito(){
         </div>`;
     });
 
-    document.getElementById('listaCarrito').innerHTML = html || 'Carrito vacío';
-    document.getElementById('totalCarrito').innerText = total.toLocaleString();
-    document.getElementById('cantidad_carrito').innerText = cant;
+    listaCarrito.innerHTML = html || 'Carrito vacío';
+    totalCarrito.innerText = total.toLocaleString();
+    cantidad_carrito.innerText = cant;
 }
 
 function sumar(nombre){
@@ -423,9 +304,14 @@ function restar(nombre){
     actualizarCarrito();
 }
 
+function vaciarCarrito(){
+    carrito = [];
+    actualizarCarrito();
+}
+
 function toggleCarrito(){
-    const box = document.getElementById('miniCarrito');
-    box.style.display = box.style.display==='block'?'none':'block';
+    miniCarrito.style.display =
+        miniCarrito.style.display==='block'?'none':'block';
 }
 
 function enviarWhatsApp(){
@@ -439,8 +325,6 @@ function enviarWhatsApp(){
 
 aplicarFiltros();
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
