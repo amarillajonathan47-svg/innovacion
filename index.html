@@ -39,12 +39,22 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     max-width: 1400px;
     margin: auto;
     padding: 20px;
+    align-items: start;
 }
 
 .filters {
     background: white;
-    padding: 20px;
     border-radius: 20px;
+    position: sticky;
+    top: 20px;
+    padding: 15px;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .product-grid {
@@ -68,6 +78,8 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     padding: 15px;
 }
 
+.product-img-box img { max-width: 100%; max-height: 100%; }
+
 .product-info { padding: 15px; text-align: center; }
 
 .product-price { font-size: 1.3rem; font-weight: bold; }
@@ -81,32 +93,21 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     border-radius: 10px;
 }
 
-/* PANEL DERECHO */
 .carrito-bar {
     position: fixed;
     right: 20px;
     bottom: 30px;
-    background: white;
+    background: rgba(255,255,255,0.95);
     padding: 15px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    width: 190px;
+    z-index: 2000;
+    width: 170px;
 }
 
-/* BADGE ROJO */
-.badge-cart {
-    background: red;
-    color: white;
-    border-radius: 50%;
-    padding: 3px 8px;
-    font-size: 0.75rem;
-    margin-left: 5px;
-}
-
-/* MINI CARRITO */
 #miniCarrito {
     display: none;
     position: fixed;
@@ -117,6 +118,7 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     padding: 20px;
+    z-index: 3000;
 }
 
 .qty-btn {
@@ -125,28 +127,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     width: 25px;
     height: 25px;
     border-radius: 6px;
-}
-
-/* PAGINACIÓN */
-.pagination-custom {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 30px;
-}
-
-.page-btn {
-    border: none;
-    background: white;
-    width: 35px;
-    height: 35px;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-.page-active {
-    background: #0d6efd;
-    color: white;
 }
 </style>
 </head>
@@ -167,28 +147,41 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 
     <!-- FILTROS -->
     <div class="filters">
-        <h6 class="fw-bold">Filtros</h6>
+        <div class="filter-header" onclick="toggleFiltros()">
+            <span>Filtros</span>
+            <span id="flechaFiltro">▼</span>
+        </div>
 
-        <input type="radio" name="cat" onclick="filtrarCategoria('Todos')" checked> Todos<br>
-        <input type="radio" name="cat" onclick="filtrarCategoria('Tecnología')"> Tecnología<br>
-        <input type="radio" name="cat" onclick="filtrarCategoria('Electrodomésticos')"> Electrodomésticos<br>
-        <input type="radio" name="cat" onclick="filtrarCategoria('Celulares')"> Celulares
+        <div id="filterBody">
+            <input type="radio" name="cat" onclick="filtrarCategoria('Todos')" checked> Todos<br>
+            <input type="radio" name="cat" onclick="filtrarCategoria('Tecnología')"> Tecnología<br>
+            <input type="radio" name="cat" onclick="filtrarCategoria('Electrodomésticos')"> Electrodomésticos<br>
+            <input type="radio" name="cat" onclick="filtrarCategoria('Celulares')"> Celulares
+        </div>
     </div>
 
     <!-- PRODUCTOS -->
     <div>
+
+        <!-- BARRA SUPERIOR -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <strong id="contadorProductos">0</strong> productos encontrados
+            </div>
+
+            <select class="form-select form-select-sm w-auto" onchange="ordenarProductos(this.value)">
+                <option value="default">Ordenar</option>
+                <option value="mayor">Precio: Mayor a menor</option>
+                <option value="menor">Precio: Menor a mayor</option>
+            </select>
+        </div>
+
         <div class="product-grid" id="contenedorProductos"></div>
 
-        <!-- PAGINACIÓN -->
-        <div class="pagination-custom">
-            <button class="page-btn" onclick="cambiarPagina(-1)">◀</button>
-
-            <button class="page-btn" id="p1" onclick="irPagina(1)">1</button>
-            <button class="page-btn" id="p2" onclick="irPagina(2)">2</button>
-            <button class="page-btn" id="p3" onclick="irPagina(3)">3</button>
-            <button class="page-btn" id="p4" onclick="irPagina(4)">4</button>
-
-            <button class="page-btn" onclick="cambiarPagina(1)">▶</button>
+        <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-sm btn-dark me-2" onclick="cambiarPagina(-1)">Anterior</button>
+            <span id="paginaActual" class="align-self-center"></span>
+            <button class="btn btn-sm btn-dark ms-2" onclick="cambiarPagina(1)">Siguiente</button>
         </div>
     </div>
 
@@ -197,11 +190,8 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 <!-- MINI CARRITO -->
 <div id="miniCarrito">
     <h6 class="fw-bold">🛒 Tu Pedido</h6>
-
     <div id="listaCarrito"></div>
-
     <hr>
-
     <div class="d-flex justify-content-between mb-3">
         <span>Total:</span>
         <span class="fw-bold">$<span id="totalCarrito">0</span></span>
@@ -215,7 +205,7 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 <!-- PANEL DERECHO -->
 <div class="carrito-bar">
     <button class="btn btn-dark btn-sm" onclick="toggleCarrito()">
-        🛒 Ver Carrito <span class="badge-cart" id="cantidad_carrito">0</span>
+        🛒 Ver Carrito (<span id="cantidad_carrito">0</span>)
     </button>
 
     <button class="btn btn-success btn-sm" onclick="enviarWhatsApp()">
@@ -226,7 +216,7 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 <script>
 const productos = [];
 
-for(let i=1;i<=60;i++){
+for(let i=1;i<=50;i++){
     productos.push({
         id:i,
         nombre:'Producto '+i,
@@ -239,9 +229,10 @@ for(let i=1;i<=60;i++){
 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 let categoriaActiva = 'Todos';
 let pagina = 1;
+let ordenActual = 'default';
 
 const porPagina = 15;
-const maxPaginas = 4;
+const MAX_PAGINAS = 4;
 
 function aplicarFiltros() {
     const texto = document.getElementById('inputBuscador').value.toLowerCase();
@@ -251,7 +242,20 @@ function aplicarFiltros() {
         (categoriaActiva === 'Todos' || p.cat === categoriaActiva)
     );
 
+    if (ordenActual === 'mayor')
+        filtrados.sort((a,b) => b.precio - a.precio);
+
+    if (ordenActual === 'menor')
+        filtrados.sort((a,b) => a.precio - b.precio);
+
+    document.getElementById('contadorProductos').innerText = filtrados.length;
+
     renderProductos(filtrados);
+}
+
+function ordenarProductos(tipo) {
+    ordenActual = tipo;
+    aplicarFiltros();
 }
 
 function filtrarCategoria(cat) {
@@ -261,12 +265,13 @@ function filtrarCategoria(cat) {
 }
 
 function renderProductos(lista) {
-
-    if (pagina < 1) pagina = 1;
-    if (pagina > maxPaginas) pagina = maxPaginas;
-
     const contenedor = document.getElementById('contenedorProductos');
     contenedor.innerHTML = '';
+
+    const totalPaginas = Math.min(Math.ceil(lista.length / porPagina), MAX_PAGINAS);
+
+    if(pagina < 1) pagina = 1;
+    if(pagina > totalPaginas) pagina = totalPaginas;
 
     const inicio = (pagina - 1) * porPagina;
     const paginaProductos = lista.slice(inicio, inicio + porPagina);
@@ -288,27 +293,16 @@ function renderProductos(lista) {
         `;
     });
 
-    actualizarPaginacion();
-}
-
-function actualizarPaginacion() {
-    for(let i=1;i<=4;i++){
-        document.getElementById('p'+i).classList.remove('page-active');
-    }
-    document.getElementById('p'+pagina).classList.add('page-active');
+    document.getElementById('paginaActual').innerText =
+        `Página ${pagina} / ${totalPaginas || 1}`;
 }
 
 function cambiarPagina(dir) {
     pagina += dir;
 
-    if (pagina < 1) pagina = 1;
-    if (pagina > maxPaginas) pagina = maxPaginas;
+    if(pagina < 1) pagina = 1;
+    if(pagina > MAX_PAGINAS) pagina = MAX_PAGINAS;
 
-    aplicarFiltros();
-}
-
-function irPagina(num) {
-    pagina = num;
     aplicarFiltros();
 }
 
@@ -373,6 +367,19 @@ function enviarWhatsApp() {
     carrito.forEach(p => mensaje += `- ${p.nombre} x${p.cantidad}%0A`);
 
     window.open(`https://wa.me/5491158165717?text=${mensaje}`);
+}
+
+function toggleFiltros() {
+    const body = document.getElementById('filterBody');
+    const flecha = document.getElementById('flechaFiltro');
+
+    if(body.style.display === 'none') {
+        body.style.display = 'block';
+        flecha.innerText = '▼';
+    } else {
+        body.style.display = 'none';
+        flecha.innerText = '▲';
+    }
 }
 
 aplicarFiltros();
