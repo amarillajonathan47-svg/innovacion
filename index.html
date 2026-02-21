@@ -18,10 +18,14 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
     background-position: center;
 }
 
+/* 🔥 ÚNICO CAMBIO */
 .search-container {
     max-width: 800px;
     margin: -30px auto 30px auto;
     padding: 0 15px;
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
 }
 
 .search-container input {
@@ -133,7 +137,6 @@ body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
 
 <header class="banner"></header>
 
-<!-- BUSCADOR RESTAURADO -->
 <div class="search-container">
     <div class="position-relative">
         <span class="position-absolute top-50 start-0 translate-middle-y ms-3">🔍</span>
